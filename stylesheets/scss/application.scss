@@ -1,0 +1,398 @@
+//************************************************************************//
+// IMPORTS
+//************************************************************************//
+
+@import "vendor/normalize";
+@import "bourbon/bourbon";
+
+// Neat settings
+@import "neat/neat-helpers";
+
+$max-width: 80%;
+
+@import "neat/neat";
+
+// Fonts
+@include font-face(source-code, '../../fonts/source-code/SourceCodePro-Regular-webfont', normal);
+@include font-face(source-code, '../../fonts/source-code/SourceCodePro-Bold-webfont', bold);
+
+//************************************************************************//
+// VARIABLES
+//************************************************************************//
+
+$color-background: white;
+$color-background-darker: #F0F0F0;
+$color-midground: #CCC;
+$color-foreground: #333;
+$color-link: rgb(57, 163, 255);
+
+$font-mono: source-code, $monospace;
+
+$small: em(24);
+$medium: em(40);
+
+//************************************************************************//
+// MIXINS
+//************************************************************************//
+
+@mixin element-margin($margin) {
+  h1, h2, h3, h4, p, ul, ol {
+    margin: $margin;
+    padding: 0;
+  }
+}
+
+//************************************************************************//
+// ELEMENTS
+//************************************************************************//
+
+html,
+body {
+  font-family: $helvetica;
+  font-size: 16px;
+  color: $color-foreground;
+  line-height: $small;
+  background-color: $color-background-darker;
+}
+
+@include element-margin(0 0 1em);
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: bold;
+}
+
+a {
+  color: $color-link;
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+}
+
+.left {
+  float: left !important;
+}
+
+.right {
+  float: right !important;
+}
+
+.button {
+  background-color: $color-background-darker;
+  border-radius: 5px;
+  color: $color-link;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: bold;
+  height: $medium;
+  line-height: $medium;
+  padding: 0 em(20);
+  text-align: center;
+
+  &:hover {
+    background-color: darken($color-background-darker, 10%);
+    color: darken($color-link, 20%);
+  }
+
+  &.outline {
+    border: 1px solid $color-link;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $color-link;
+      color: white;
+    }
+  }
+
+  &.action,
+  &.is-selected {
+    color: white;
+    background-color: $color-link;
+
+    &:hover {
+      background-color: darken($color-link, 15%);
+    }
+  }
+}
+
+.button-group {
+
+  .button {
+    border-radius: 0;
+    float: left;
+    margin-left: -1px;
+
+    &:first-child {
+      border-radius: 5px 0 0 5px;
+      margin: 0;
+    }
+
+    &:last-child {
+      border-radius: 0 5px 5px 0;
+    }
+  }
+}
+
+.primary-container {
+  @include transition(all 0.5s);
+  background-color: $color-background;
+  position: relative;
+  z-index: 1;
+}
+
+//************************************************************************//
+// COMPONENTS
+//************************************************************************//
+
+nav {
+  margin-bottom: 1em;
+
+  h4, 
+  a {
+    height: $medium;
+    line-height: $medium;
+    margin-bottom: em(5);
+    padding: 0 em(10);
+  }
+
+  h4 {
+    color: $color-midground;
+    margin: 0;
+  }
+
+  a {
+    border-radius: 5px;
+    display: block;
+
+    &:hover {
+      background-color: lighten($color-background-darker, 3%);
+    }
+  }
+
+  .active,
+  .active:hover {
+    background-color: $color-background-darker;
+    color: darken($color-link, 10%);
+    font-weight: bold;
+  }
+}
+
+.title {
+  h2 {
+    margin-bottom: 0.25em;
+  }
+
+  h3 {
+    font-weight: normal;
+    font-style: italic;
+    color: lighten($color-foreground, 20%);
+  }
+}
+
+.markdown {
+  $header-height: $small;
+  @include clearfix;
+  @include fill-parent;
+  margin: 0 0 1em;
+
+  .markdown-input,
+  .markdown-output {
+    @include span-columns(4.5 of 9);
+    @include pad(4em default default);
+    position: relative;
+    border-radius: 5px;
+    background-color: $color-background-darker;
+
+    &::before {
+      @include pad(default $small default default);
+      @include position(absolute, 0px 0 0 0px);
+      @include size(auto $header-height);
+      background-color: darken($color-background-darker, 5%);
+      border-radius: 5px 0 5px 0;
+      color: darken($color-midground, 25%);
+      display: block;
+      font-family: $helvetica;
+      font-size: em(14);
+      line-height: $header-height;
+    }
+  }
+
+  .markdown-input {
+    font-family: $font-mono;
+
+    &::before {
+      content: "If you type...";
+    }
+  }
+
+  .markdown-output {
+    @include omega;
+    &::before {
+      content: "You'll get...";
+    }
+  }
+
+  // markdown styles
+  @include element-margin(0);
+
+  li {
+    list-style-position: inside;
+  }
+
+  ul {
+    li {
+      list-style-type: disc;
+    }
+
+    ul li {
+      list-style-type: circle;
+    }
+  }
+
+  ol {
+    li {
+      list-style-type: decimal;
+    }
+
+    ol li {
+      list-style-type: lower-alpha;
+    }
+  }
+}
+
+.input {
+  @include row();
+  margin-bottom: 1em;
+
+  label {
+    @include span-columns(3 of 8);
+    line-height: $medium;
+    color: lighten($color-foreground, 5%);
+  }
+
+  input,
+  .button-group {
+    @include span-columns(5 of 8);
+  }
+
+  input {
+    $padding: ($medium - $small) / 2;
+    background-color: $color-background-darker;
+    border: 1px solid $color-midground;
+    border-radius: 3px;
+    height: $medium;
+    line-height: $small;
+    outline: none;
+    padding: $padding em(10);
+
+    &:focus {
+      background-color: $color-background;
+    }
+
+    @include placeholder {
+      font-style: italic;
+    }
+  }
+
+  .button-group {
+    .button {
+      width: 50%;
+    }
+  }
+}
+
+.form-actions {
+  padding-top: $gutter;
+
+  .button {
+    width: 50%;
+    margin: 0 auto 0.5em;
+    display: block;
+  }
+}
+
+//************************************************************************//
+// MODULES
+//************************************************************************//
+
+.wrapper {
+  @include outer-container;
+  @include pad(default);
+}
+
+header {
+  @include fill-parent;
+
+  h1 {
+    float: left;
+    margin: 0;
+  }
+
+  .button {
+    float: right;
+    font-weight: normal;
+  }
+}
+
+aside {
+  @include span-columns(3);
+}
+
+.main {
+  @include span-columns(9);
+  @include omega;
+  margin-top: em(12);
+
+  article {
+    @include row();
+    margin-bottom: 2em;
+  }
+}
+
+footer {
+  @include fill-parent;
+  background-color: $color-background-darker;
+}
+
+.secondary-container {
+  @include outer-container;
+  @include fill-parent;
+  @include position(absolute, 0px 0 0 50%);
+  @include pad(default);
+  margin-left: -($max-width / 2);
+  margin-bottom: $column;
+  section {
+    @include span-columns(8);
+    @include shift(2);
+  }
+
+  .title {
+    text-align: center;
+  }
+}
+
+//************************************************************************//
+// PAGES
+//************************************************************************//
+
+
+
+//************************************************************************//
+// STATES
+//************************************************************************//
+
+body.show-secondary {
+  .primary-container {
+    @include transform(rotateX(3deg) translateY(500px) scale(0.95, 0.95) translateZ(-100px)); 
+    @include transform-style(preserve-3d);
+    opacity: 0.7;
+  }
+
+  .secondary-container {
+    
+  }
+}
